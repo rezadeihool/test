@@ -4,6 +4,7 @@ import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import org.bbottema.javasocksproxyserver.SocksServer
+import org.bbottema.javasocksproxyserver.auth.UsernamePasswordAuthenticator
 import java.net.InetAddress
 import java.net.ServerSocket
 import javax.net.ServerSocketFactory
@@ -37,6 +38,11 @@ fun Application.configureRouting() {
                     return ServerSocket(port, backlog, InetAddress.getByName("0.0.0.0"))
                 }
 
+            })
+            socksServer.setAuthenticator(object : UsernamePasswordAuthenticator(false){
+                override fun validate(username: String?, password: String?): Boolean {
+                    return (username == "andy" && password == "andy")
+                }
             })
             socksServer.start()
             println("The proxy server is started successfully >> ${socksServer.listenPort} :))")
