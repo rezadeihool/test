@@ -26,7 +26,7 @@ fun main(args: Array<String>) {
             ifAddress: InetAddress?
         ): ServerSocket? {
             println("Third called")
-            return ServerSocket(4112, backlog, InetAddress.getByAddress("0.0.0.0".toByteArray()))
+            return ServerSocket(4112, backlog, InetAddress.getByName("0.0.0.0"))
         }
 
     })
