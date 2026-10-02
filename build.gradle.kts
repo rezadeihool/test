@@ -1,3 +1,5 @@
+import sun.tools.jar.resources.jar
+
 plugins {
     alias(libs.plugins.kotlin.jvm)
     alias(ktorLibs.plugins.ktor)
@@ -13,6 +15,21 @@ application {
 kotlin {
     jvmToolchain(21)
 }
+
+
+tasks.jar {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+    manifest {
+        attributes["Main-Class"] = "io.ktor.server.netty.EngineMain"
+    }
+
+    from({
+        configurations.runtimeClasspath.get().map { if (it.isDirectory) it else zipTree(it) }
+    })
+}
+
+
 dependencies {
     implementation(ktorLibs.server.config.yaml)
     implementation(ktorLibs.server.core)
