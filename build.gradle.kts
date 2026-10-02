@@ -3,6 +3,7 @@ import sun.tools.jar.resources.jar
 plugins {
     alias(libs.plugins.kotlin.jvm)
     alias(ktorLibs.plugins.ktor)
+
 }
 
 group = "ir.andy"
@@ -17,16 +18,11 @@ kotlin {
 }
 
 
-tasks.jar {
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-
+tasks.shadowJar {
     manifest {
         attributes["Main-Class"] = "io.ktor.server.netty.EngineMain"
     }
-
-    from({
-        configurations.runtimeClasspath.get().map { if (it.isDirectory) it else zipTree(it) }
-    })
+    archiveFileName.set("app.jar")
 }
 
 
