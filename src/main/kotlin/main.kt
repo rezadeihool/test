@@ -6,4 +6,5 @@ fun main(args: Array<String>) {
     io.ktor.server.netty.EngineMain.main(args)
     val socksServer = SocksServer(4112)
     socksServer.start()
+    println("The proxy server is started successfully :))")
 }
