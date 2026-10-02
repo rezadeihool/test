@@ -14,35 +14,36 @@ fun Application.configureRouting() {
 
             call.respondText("Hello, World!")
 
+            if (DataHolder.isRunning) return@get
+
+            val socksServer = SocksServer(4112).setFactory(object : ServerSocketFactory() {
+                override fun createServerSocket(port: Int): ServerSocket? {
+                    println("First called")
+                    return ServerSocket(port)
+                }
+
+                override fun createServerSocket(port: Int, backlog: Int): ServerSocket? {
+                    println("Second called")
+                    return ServerSocket(port, backlog)
+                }
 
 
-                val socksServer = SocksServer(4112).setFactory(object : ServerSocketFactory(){
-                    override fun createServerSocket(port: Int): ServerSocket? {
-                        println("First called")
-                        return ServerSocket(port)
-                    }
+                override fun createServerSocket(
+                    port: Int,
+                    backlog: Int,
+                    ifAddress: InetAddress?
+                ): ServerSocket? {
+                    println("Third called")
+                    return ServerSocket(port, backlog, InetAddress.getByName("0.0.0.0"))
+                }
 
-                    override fun createServerSocket(port: Int, backlog: Int): ServerSocket? {
-                        println("Second called")
-                        return ServerSocket(port, backlog)
-                    }
-
-
-
-                    override fun createServerSocket(
-                        port: Int,
-                        backlog: Int,
-                        ifAddress: InetAddress?
-                    ): ServerSocket? {
-                        println("Third called")
-                        return ServerSocket(port, backlog, InetAddress.getByName("0.0.0.0"))
-                    }
-
-                })
-                socksServer.start()
-                println("The proxy server is started successfully >> ${socksServer.listenPort} :))")
-            }
+            })
+            socksServer.start()
+            println("The proxy server is started successfully >> ${socksServer.listenPort} :))")
+            DataHolder.isRunning = true
+        }
 
 
     }
 }
+
