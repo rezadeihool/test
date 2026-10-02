@@ -33,7 +33,6 @@ dependencies {
     implementation(ktorLibs.server.netty)
     implementation(libs.logback.classic)
     implementation("com.github.bbottema:java-socks-proxy-server:4.2.0")
-    implementation("org.littleshoot:littleproxy:1.1.2")
     testImplementation(kotlin("test"))
     testImplementation(ktorLibs.server.testHost)
 }
